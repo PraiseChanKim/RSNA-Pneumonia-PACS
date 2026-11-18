@@ -1,5 +1,9 @@
 
 import streamlit as st
+import pydicom
+import numpy as np
+
+from pydicom.pixels import apply_voi_lut
 
 st.set_page_config(
     page_title="RSNA Pneumonia PACS",
@@ -16,5 +20,39 @@ uploaded_file = st.file_uploader(
 )
 
 if uploaded_file is not None:
-    st.success(f"파일 선택 완료: {uploaded_file.name}")
+    try:
+        dicom = pydicom.dcmread(uploaded_file)
 
+        image = apply_voi_lut(dicom.pixel_array, dicom)
+        image = image.astype(np.float32)
+
+        if image.ndim != 2:
+            raise ValueError("2차원 흑백 DICOM만 지원합니다.")
+
+        min_value = np.min(image)
+        max_value = np.max(image)
+
+        if max_value > min_value:
+            image = (image - min_value) / (max_value - min_value) * 255
+        else:
+            image = np.zeros_like(image)
+
+        image = image.astype(np.uint8)
+
+        if dicom.get("PhotometricInterpretation") == "MONOCHROME1":
+            image = 255 - image
+
+        st.success("DICOM 영상 불러오기 성공!")
+
+        st.image(
+            image,
+            caption="Original Chest X-ray",
+            clamp=True
+        )
+
+        st.subheader("영상 정보")
+        st.write("가로:", dicom.Columns)
+        st.write("세로:", dicom.Rows)
+
+    except Exception as e:
+        st.error(f"DICOM 영상 처리 실패: {e}")
