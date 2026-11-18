@@ -1,0 +1,71 @@
+
+# ==================================
+# Python
+# ==================================
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ==================================
+# Python Virtual Environment
+# ==================================
+.venv/
+venv/
+env/
+
+# ==================================
+# Environment Variables & Secrets
+# ==================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+serviceAccountKey.json
+*firebase-adminsdk*.json
+
+# ==================================
+# RSNA Dataset / Medical Images
+# ==================================
+data/
+datasets/
+*.dcm
+*.dicom
+
+# ==================================
+# Generated Results
+# ==================================
+outputs/
+results/
+temp/
+*.log
+
+# ==================================
+# Jupyter Notebook
+# ==================================
+.ipynb_checkpoints/
+
+# ==================================
+# IDE / OS
+# ==================================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==================================
+# Streamlit Secrets
+# ==================================
+.streamlit/secrets.toml
+
+# ==================================
+# Build
+# ==================================
+build/
+dist/
+*.egg-info/
+
